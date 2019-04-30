@@ -4,7 +4,6 @@ import { shallow } from 'enzyme';
 import { findByTestAttr, checkProps } from '../../../test/testUtils';
 import Congrats from './Congrats';
 
-
 const defaultProps = { success: false } //setting the default props for every component instance
 
 /**
