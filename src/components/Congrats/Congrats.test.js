@@ -2,10 +2,12 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 
-import { findByTestAttr } from '../../../test/testUtils';
+import { findByTestAttr, checkProps } from '../../../test/testUtils';
 import Congrats from './Congrats';
 
 Enzyme.configure({ adapter: new EnzymeAdapter });
+
+const defaultProps = { success: false } //setting the default props for every component instance
 
 /**
  * Factory function to create a ShallowWrapper for the Congrats component.
@@ -14,11 +16,12 @@ Enzyme.configure({ adapter: new EnzymeAdapter });
  * @returns {ShallowWrapper}
  */
 const setup = (props={}) => {
-   return shallow(<Congrats {...props} />)
+   const setupProps = {...defaultProps, ...props} // ...if props are passed in, they will override the default props.
+   return shallow(<Congrats {...setupProps} />)
 }
 
-test('renders without error', () => {
-   const wrapper = setup(); //set up wrapper
+test('renders without error', () => { 
+   const wrapper = setup({ success: false }); //set up wrapper
    const component = findByTestAttr(wrapper, 'component-congrats'); //find component node
    expect(component.length).toBe(1);
 });
@@ -32,3 +35,7 @@ test('renders non-empty congrats message when `success` prop is true', () => {
    const message = findByTestAttr(wrapper, 'congrats-message');
    expect(message.text().length).not.toBe(0)
 }); 
+test('does not throw warning with expected props', () => {
+   const expectedProps = { success: false };
+   checkProps(Congrats, expectedProps); //the assertion for this test is in the checkProps function
+})
